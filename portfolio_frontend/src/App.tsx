@@ -18,6 +18,8 @@ function App() {
     return (Number(balanceData.totalBalance) / 1_000_000_000).toFixed(2);
   };
 
+
+
   return (
     <div>
       <ToastContainer position="top-right" theme="dark" autoClose={3000} hideProgressBar={false} />
