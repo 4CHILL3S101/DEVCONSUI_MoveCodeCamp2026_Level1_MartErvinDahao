@@ -21,7 +21,7 @@ body {
   margin: 0 auto;
   padding: 40px;
   background: linear-gradient(to bottom, #020617, #0b1b3a);
-  border-radius: 28px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 40px;
@@ -101,7 +101,7 @@ body {
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #0b1b3a;
   color: #93c5fd;
   text-decoration: none;
@@ -184,7 +184,7 @@ body {
   margin: 0 auto;
   background: linear-gradient(145deg, #020617, #0b1b3a);
   padding: 40px;
-  border-radius: 26px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -223,7 +223,7 @@ body {
 .learn-more-btn {
   width: fit-content;
   padding: 12px 20px;
-  border-radius: 14px;
+  border-radius: 10px;
   border: 1px solid #1e40af;
   background: transparent;
   color: #60a5fa;

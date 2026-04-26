@@ -30,23 +30,23 @@ const useMetaTags = (metadata: {
     ];
 
     metaTags.forEach((tag) => {
-      const selector = 'property' in tag 
-        ? `meta[property="${tag.property}"]` 
+      const selector = 'property' in tag
+        ? `meta[property="${tag.property}"]`
         : `meta[name="${tag.name}"]`;
-      
+
       let element = document.querySelector(selector) as HTMLMetaElement;
-      
+
       if (!element) {
         // Create element if it doesn't exist
         element = document.createElement('meta');
         if ('property' in tag) {
-          element.setAttribute('property', tag.property);
+          element.setAttribute('property', tag.property as string);
         } else {
           element.setAttribute('name', tag.name);
         }
         document.head.appendChild(element);
       }
-      
+
       element.content = tag.content;
     });
 
@@ -66,19 +66,16 @@ const useMetaTags = (metadata: {
 // PORTFOLIO DATA CONFIGURATION
 // ============================================================================
 const defaultPortfolioData = {
-  name: "LADY DIANE BAUZON CASILANG",
+  name: "Mart Ervin Dahao",
   course: "BS in Information Technology",
-  school: "FEU Institute of Technology",
-  about: "I am a fourth-year IT student and freelance designer who integrates technical troubleshooting with creative insight to deliver innovative, efficient solutions.",
+  school: "Bukidnon State University",
+  about: "I am a fourth-year IT student and freelance fullstack developer who integrates technical troubleshooting with creative insight to deliver innovative, efficient solutions.",
   skills: [
-    "Graphic Design",
-    "UI / UX Design",
-    "Project Management",
     "Full Stack Development",
-    "Web & App Development"
+    "Web,Desktop & App Development"
   ],
-  linkedin: "https://www.linkedin.com/in/ldcasilang/",
-  github: "https://github.com/ldcasilang",
+  linkedin: "https://www.linkedin.com/in/mart-ervin-dahao-857258399/",
+  github: "https://github.com/4CHILL3S101/",
 }
 
 // Network configuration
@@ -100,10 +97,10 @@ const PortfolioView = () => {
   // STATE MANAGEMENT
   // ==========================================================================
   const objectId = MAINNET_PORTFOLIO_ID;
-  
+
   // Network state - default to testnet, can be changed if needed
   const [currentNetwork, setCurrentNetwork] = useState<"testnet" | "mainnet">("mainnet");
-  
+
   const [portfolioData, setPortfolioData] = useState(defaultPortfolioData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -131,9 +128,9 @@ const PortfolioView = () => {
     const fetchPortfolioData = async () => {
       try {
         setIsLoading(true);
-        
+
         const network = NETWORKS[currentNetwork];
-        
+
         const response = await fetch(
           network.fullnode,
           {
@@ -162,20 +159,20 @@ const PortfolioView = () => {
         );
 
         const result = await response.json();
-       
+
         if (result.error) {
           throw new Error(result.error.message || "Failed to fetch from blockchain");
         }
-        
+        console.log(result.result.data)
         if (result.result?.data) {
           // Store the transaction ID from the response
           if (result.result.data.previousTransaction) {
             setTransactionId(result.result.data.previousTransaction);
           }
-          
+
           if (result.result.data.content?.fields) {
-            const fields = result.result.data.content.fields;
-           
+            const fields = result.result.data.content.fields
+
             const newPortfolioData = {
               name: fields.name || defaultPortfolioData.name,
               course: fields.course || defaultPortfolioData.course,
@@ -185,8 +182,7 @@ const PortfolioView = () => {
               github: fields.github_url || defaultPortfolioData.github,
               skills: fields.skills ? fields.skills.split(",").map(s => s.trim()) : defaultPortfolioData.skills,
             };
-            
-            setPortfolioData(newPortfolioData);
+            setPortfolioData(newPortfolioData)
           } else {
             throw new Error("No portfolio data found in object");
           }
@@ -238,7 +234,7 @@ const PortfolioView = () => {
           color: "#856404",
           padding: "1rem",
           margin: "1rem",
-          borderRadius: "8px",
+          borderRadius: "0px",
           border: "1px solid #ffeaa7",
           textAlign: 'center'
         }}>
@@ -254,7 +250,7 @@ const PortfolioView = () => {
           {/* Profile Image - Static local image only */}
           <div className="avatar">
             <img
-              src="/profile.png"
+              src="https://res.cloudinary.com/dhjvx2dvz/image/upload/v1776867773/profiles/Mart%20Ervin_Dahao-1776867768715.png"
               alt={portfolioData.name}
               crossOrigin="anonymous"
               onError={(e) => {
@@ -344,189 +340,189 @@ const PortfolioView = () => {
         </div>
       </div>
 
-  {/* ===================================================================== */}
-{/* FOOTER - Attribution and Logos */}
-{/* ===================================================================== */}
-<div className="custom-footer">
-  <div className="footer-container" style={{
-    maxWidth: '1400px',
-    margin: '0 auto',
-    padding: '2rem 2rem',
-    display: 'flex',
-    flexDirection: 'column',  // Stack items vertically
-    alignItems: 'flex-start',  // Left align everything
-    gap: '1.5rem',
-    flexWrap: 'wrap'
-  }}>
-    
-    {/* Organization Logos - Left aligned */}
-    <div className="footer-logos" style={{
-      display: 'flex',
-      gap: '2rem',  // Increased gap slightly
-      alignItems: 'center',
-      justifyContent: 'flex-start',  // Left align logos
-      width: '100%'
-    }}>
-      <a 
-        href="https://devcon.ph/" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        style={{ 
-          display: 'inline-block',
-          transition: 'all 0.3s ease',
-          borderRadius: '12px',
-          padding: '8px'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.border = '2px solid #3B82F6';
-          e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-          e.currentTarget.style.transform = 'scale(1.05)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.border = '2px solid transparent';
-          e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-      >
-        <img 
-          src="/devcon.png" 
-          alt="DEVCON" 
-          className="logo-img" 
-          style={{ 
-            height: '30px',  // Increased from 40px to 60px (50% larger)
-            width: 'auto' 
-          }} 
-        />
-      </a>
-      <a 
-        href="https://sui.io/" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        style={{ 
-          display: 'inline-block',
-          transition: 'all 0.3s ease',
-          borderRadius: '12px',
-          padding: '8px'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.border = '2px solid #3B82F6';
-          e.currentTarget.style.backgroundColor = 'rgba(108, 142, 239, 0.1)';
-          e.currentTarget.style.transform = 'scale(1.05)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.border = '2px solid transparent';
-          e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-      >
-        <img 
-          src="/sui.png" 
-          alt="SUI" 
-          className="logo-img" 
-          style={{ 
-            height: '30px',  // Kept at 40px
-            width: 'auto' 
-          }} 
-        />
-      </a>
-    </div>
-    
-    {/* Code Camp Attribution Text - Left aligned */}
-    <div className="footer-text" style={{
-      width: '100%',
-      maxWidth: '1000px',
-      textAlign: 'left'  // Left align text
-    }}>
-      <p style={{ 
-        margin: 0,
-        fontSize: '0.9rem',
-        lineHeight: '1.6',
-        color: '#ffffff',
-        textAlign: 'left',  // Left align
-        maxWidth: '100%',
-        fontWeight: 400,
-        letterSpacing: '0.01em'
-      }}>
-        <span style={{ fontWeight: 600, color: '#ffffff' }}>Proof of Learning Portfolio</span> project proudly built and published with informed consent during a <span style={{ fontWeight: 500, color: '#ffffff' }}>Move Smart Contracts Code Camp</span> by DEVCON Philippines & Sui Foundation — where the participant wrote, tested, and deployed a Move smart contract on Sui Mainnet. The object's immutability serves one purpose: the participant's authorship and timestamp cannot be altered, removed, or claimed by anyone else.
-      </p>
-      
-      {/* Project Deployment Links - Left aligned */}
-      <div style={{
-        display: "flex",
-        gap: "1.5rem",
-        justifyContent: "flex-start",  // Left align buttons
-        alignItems: "center",
-        flexWrap: "wrap",
-        marginTop: "1.2rem"
-      }}>
-        {/* Object Link - DYNAMIC */}
-        {objectId ? (
-          <a 
-            href={`${NETWORKS[currentNetwork].explorer}/object/${objectId}/fields`} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{
-              color: '#6C8EEF',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              padding: '0.5rem 1rem',
-              borderRadius: '6px',
-              border: '1px solid rgba(108, 142, 239, 0.3)',
-              backgroundColor: 'rgba(108, 142, 239, 0.05)',
+      {/* ===================================================================== */}
+      {/* FOOTER - Attribution and Logos */}
+      {/* ===================================================================== */}
+      <div className="custom-footer">
+        <div className="footer-container" style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '2rem 2rem',
+          display: 'flex',
+          flexDirection: 'column',  // Stack items vertically
+          alignItems: 'flex-start',  // Left align everything
+          gap: '1.5rem',
+          flexWrap: 'wrap'
+        }}>
+
+          {/* Organization Logos - Left aligned */}
+          <div className="footer-logos" style={{
+            display: 'flex',
+            gap: '2rem',  // Increased gap slightly
+            alignItems: 'center',
+            justifyContent: 'flex-start',  // Left align logos
+            width: '100%'
+          }}>
+            <a
+              href="https://devcon.ph/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                transition: 'all 0.3s ease',
+                borderRadius: '12px',
+                padding: '8px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.border = '2px solid #3B82F6';
+                e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.border = '2px solid transparent';
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <img
+                src="/devcon.png"
+                alt="DEVCON"
+                className="logo-img"
+                style={{
+                  height: '30px',  // Increased from 40px to 60px (50% larger)
+                  width: 'auto'
+                }}
+              />
+            </a>
+            <a
+              href="https://sui.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                transition: 'all 0.3s ease',
+                borderRadius: '12px',
+                padding: '8px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.border = '2px solid #3B82F6';
+                e.currentTarget.style.backgroundColor = 'rgba(108, 142, 239, 0.1)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.border = '2px solid transparent';
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <img
+                src="/sui.png"
+                alt="SUI"
+                className="logo-img"
+                style={{
+                  height: '30px',  // Kept at 40px
+                  width: 'auto'
+                }}
+              />
+            </a>
+          </div>
+
+          {/* Code Camp Attribution Text - Left aligned */}
+          <div className="footer-text" style={{
+            width: '100%',
+            maxWidth: '1000px',
+            textAlign: 'left'  // Left align text
+          }}>
+            <p style={{
+              margin: 0,
               fontSize: '0.9rem',
-              fontWeight: 500,
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(108, 142, 239, 0.1)';
-              e.currentTarget.style.borderColor = '#6C8EEF';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(108, 142, 239, 0.05)';
-              e.currentTarget.style.borderColor = 'rgba(108, 142, 239, 0.3)';
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#6C8EEF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17L12 22L22 17" stroke="#6C8EEF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="#6C8EEF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Verify on Blockchain
-          </a>
-        ) : (
-          <div style={{
-            color: '#ffffff',
-            fontSize: '0.9rem',
-            padding: '0.5rem 1rem',
-            borderRadius: '6px',
-            border: '1px solid rgba(102, 102, 102, 0.2)',
-            backgroundColor: 'rgba(102, 102, 102, 0.05)',
-          }}>
-            Loading object...
+              lineHeight: '1.6',
+              color: '#ffffff',
+              textAlign: 'left',  // Left align
+              maxWidth: '100%',
+              fontWeight: 400,
+              letterSpacing: '0.01em'
+            }}>
+              <span style={{ fontWeight: 600, color: '#ffffff' }}>Proof of Learning Portfolio</span> project proudly built and published with informed consent during a <span style={{ fontWeight: 500, color: '#ffffff' }}>Move Smart Contracts Code Camp</span> by DEVCON Philippines & Sui Foundation — where the participant wrote, tested, and deployed a Move smart contract on Sui Mainnet. The object's immutability serves one purpose: the participant's authorship and timestamp cannot be altered, removed, or claimed by anyone else.
+            </p>
+
+            {/* Project Deployment Links - Left aligned */}
+            <div style={{
+              display: "flex",
+              gap: "1.5rem",
+              justifyContent: "flex-start",  // Left align buttons
+              alignItems: "center",
+              flexWrap: "wrap",
+              marginTop: "1.2rem"
+            }}>
+              {/* Object Link - DYNAMIC */}
+              {objectId ? (
+                <a
+                  href={`${NETWORKS[currentNetwork].explorer}/object/${objectId}/fields`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#6C8EEF',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '6px',
+                    border: '1px solid rgba(108, 142, 239, 0.3)',
+                    backgroundColor: 'rgba(108, 142, 239, 0.05)',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(108, 142, 239, 0.1)';
+                    e.currentTarget.style.borderColor = '#6C8EEF';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(108, 142, 239, 0.05)';
+                    e.currentTarget.style.borderColor = 'rgba(108, 142, 239, 0.3)';
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#6C8EEF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="#6C8EEF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="#6C8EEF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  Verify on Blockchain
+                </a>
+              ) : (
+                <div style={{
+                  color: '#ffffff',
+                  fontSize: '0.9rem',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(102, 102, 102, 0.2)',
+                  backgroundColor: 'rgba(102, 102, 102, 0.05)',
+                }}>
+                  Loading object...
+                </div>
+              )}
+
+              {/* Object ID Info */}
+              {objectId && (
+                <div style={{
+                  color: '#ffffff',
+                  fontSize: '0.85rem',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(102, 102, 102, 0.15)',
+                  backgroundColor: 'rgba(102, 102, 102, 0.03)',
+                  fontFamily: 'monospace'
+                }}>
+                  <span style={{ fontWeight: 400, color: '#666' }}>Object:</span> {truncateTxId(objectId)}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-        
-        {/* Object ID Info */}
-        {objectId && (
-          <div style={{
-            color: '#ffffff',
-            fontSize: '0.85rem',
-            padding: '0.5rem 1rem',
-            borderRadius: '6px',
-            border: '1px solid rgba(102, 102, 102, 0.15)',
-            backgroundColor: 'rgba(102, 102, 102, 0.03)',
-            fontFamily: 'monospace'
-          }}>
-            <span style={{ fontWeight: 400, color: '#666' }}>Object:</span> {truncateTxId(objectId)}
-          </div>
-        )}
+
+        </div>
       </div>
-    </div>
-    
-  </div>
-</div>
     </>
   )
 }
